@@ -13,8 +13,8 @@ private:
 
 public:
 
-    std::map<char, std::vector<int>> getMap() const { return this -> Frq_Map;};
-    double getCnt() const { return this -> cnt;}
+    [[nodiscard]] std::map<char, std::vector<int>> getMap() const { return this -> Frq_Map;};
+    [[nodiscard]] double getCnt() const { return this -> cnt;}
 
     explicit Letter_Frequency_Table(std::ifstream& file){
 
@@ -98,9 +98,13 @@ public:
                       return a.second > b.second;
                   });
 
-        // Print the sorted values
+        int cnt = 1;
         for (const auto& i : sortedPairs) {
-            std::cout << i.first << ": " << i.second << std::endl;
+            std::cout << i.first << ": " << cnt<< std::endl;
+            cnt++;
+            if(cnt > 50){
+                break;
+            }
         }
     }
 
@@ -109,7 +113,7 @@ public:
 int main() {
 
     std::cout << "WORDLE!" << std::endl;
-    std::ifstream inputFile("en_words");
+    std::ifstream inputFile("ro_words");
     if(!inputFile.is_open()){
         std::cerr<<"File not open";
         return 1;}
