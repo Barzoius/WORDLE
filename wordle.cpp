@@ -1,6 +1,9 @@
+#include <cmath>
 #include <iostream>
 #include <fstream>
 #include <map>
+#include <vector>
+#include <algorithm>
 
 class Letter_Frequency_Table{
 private:
@@ -52,27 +55,67 @@ public:
         file.clear();
         file.seekg(0);
 
-        for(auto& i : Frq_Map){
-            std::cout<< i.first <<":";
-            for(int j = 0; j < i.second.size(); j++)
-            {
-                std::cout<<i.second[j]<<" ";
-            }
-            std::cout<<std::endl;
-        }
-
-
-        std::cout<<cnt;
+//        for(auto& i : Frq_Map){
+//            std::cout<< i.first <<": ";
+//            for(int j = 0; j < i.second.size(); j++)
+//            {
+//                std::cout<<i.second[j]<<" ";
+//            }
+//            std::cout<<std::endl;
+//        }
+//
+//
+//        std::cout<<cnt;
     }
 
 };
+
+class WordEntropy {
+private:
+    Letter_Frequency_Table LFT;
+    std::map<std::string, double> WordEntropyMap;
+    std::string line;
+    double Entropy;
+    double prob;
+
+public:
+    WordEntropy(std::ifstream& file) : LFT(file){
+
+        while(std::getline(file, line)){
+            Entropy = 0;
+            double letter_prob = 1.0;
+            for(int i = 0; i < line.length(); i++){
+                char lower_case_i = std::tolower(line[i]);
+                letter_prob *= LFT.getMap()[lower_case_i][i];
+                Entropy = (letter_prob * std::log2(1 / letter_prob));
+            }
+            WordEntropyMap[line] = letter_prob;
+        }
+
+        std::vector<std::pair<std::string, double>> sortedPairs(WordEntropyMap.begin(), WordEntropyMap.end());
+        std::sort(sortedPairs.begin(), sortedPairs.end(),
+                  [](const std::pair<std::string, double>& a, const std::pair<std::string, double>& b) {
+                      return a.second > b.second;
+                  });
+
+        // Print the sorted values
+        for (const auto& i : sortedPairs) {
+            std::cout << i.first << ": " << i.second << std::endl;
+        }
+    }
+
+};
+
 int main() {
+
     std::cout << "WORDLE!" << std::endl;
-    std::ifstream inputFile("ro_words");
+    std::ifstream inputFile("en_words");
     if(!inputFile.is_open()){
         std::cerr<<"File not open";
         return 1;}
-    Letter_Frequency_Table RO(inputFile);
+
+//    Letter_Frequency_Table RO(inputFile);
+    WordEntropy W(inputFile);
 
     return 0;
 }
