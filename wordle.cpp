@@ -54,18 +54,6 @@ public:
         }
         file.clear();
         file.seekg(0);
-
-//        for(auto& i : Frq_Map){
-//            std::cout<< i.first <<": ";
-//            for(int j = 0; j < i.second.size(); j++)
-//            {
-//                std::cout<<i.second[j]<<" ";
-//            }
-//            std::cout<<std::endl;
-//        }
-//
-//
-//        std::cout<<cnt;
     }
 
 };
