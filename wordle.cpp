@@ -2,8 +2,10 @@
 #include <iostream>
 #include <fstream>
 #include <map>
+#include <utility>
 #include <vector>
 #include <algorithm>
+#include <ctime>
 
 class Letter_Frequency_Table{
 private:
@@ -54,6 +56,18 @@ public:
         }
         file.clear();
         file.seekg(0);
+
+        for(auto& i : Frq_Map){
+            std::cout<< i.first <<": ";
+            for(int j = 0; j < i.second.size(); j++)
+            {
+                std::cout<<i.second[j]<<" ";
+            }
+            std::cout<<std::endl;
+        }
+
+
+        std::cout<<cnt;
     }
 
 };
@@ -94,10 +108,12 @@ public:
                 break;
             }
         }
+
+        file.clear();
+        file.seekg(0);
     }
 
 };
-
 
 class WordleGame{
 private:
@@ -141,22 +157,39 @@ public:
          }
 
 
-         std::cout<<"Todays Word: " << RandomGuess;
+//         std::cout<<"Todays Word: " << RandomGuess;
 
          int cnt = 0;
          std::vector<char> Try(5);
+         std::vector<char>::iterator it;
          while(cnt != 6){
              for(int i = 0; i < 5; i++) {
                  std::cin >> Try[i];
              }
+
              UpdateBoard(Try, cnt);
              PrintBoard();
+
+             for(int i = 0; i < 5; i++){
+                 it = find(RandomGuessVector.begin(), RandomGuessVector.end(), Try[i]);
+                 if(Try[i] == RandomGuessVector[i]){
+                    std::cout<<Try[i]<<" la pozitia "<<i + 1<<" este verde"<<std::endl;
+                 }
+                 else if(it != RandomGuessVector.end()){
+                     std::cout<<Try[i]<<" la pozitia "<<i + 1<<" este galbena"<<std::endl;
+                 }
+             }
+
              if(Try == RandomGuessVector){
                  std::cout<<"You got it in "<<cnt + 1<<" tries!"<<std::endl;
                  break;
              }
              cnt++;
 
+         }
+         if(cnt==6){
+             std::cout<<"WA WA WA"<<std::endl;
+             std::cout<<"Cuvantul era: "<<RandomGuess;
          }
      }
 
@@ -165,14 +198,15 @@ public:
 
 int main() {
 
-    std::cout << "WORDLE!" << std::endl;
     std::ifstream inputFile("ro_words");
     if(!inputFile.is_open()){
         std::cerr<<"File not open";
         return 1;}
 
-//    Letter_Frequency_Table RO(inputFile);
-    WordEntropy W(inputFile);
+
+        WordEntropy W(inputFile);
+        WordleGame G(inputFile);
 
     return 0;
 }
+
