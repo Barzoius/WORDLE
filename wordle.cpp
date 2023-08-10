@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <ctime>
 
+
 class Letter_Frequency_Table{
 private:
     std::map<char, std::vector<int>> Frq_Map;
